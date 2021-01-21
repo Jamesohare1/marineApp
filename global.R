@@ -3,6 +3,7 @@ library(shiny)
 library(shiny.semantic)
 library(leaflet)
 library(dplyr)
+library(lubridate)
 
 #source the dropdown module and helper function file
 source("~/GitHub/marineApp/dropdown.R")

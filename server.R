@@ -60,7 +60,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Destination"),
-            div(class = "description", "test")
+            div(class = "description", get_destination(observations_longest()))
         )
       ),
 
@@ -68,7 +68,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Journey Time"),
-            div(class = "description", "test")
+            div(class = "description", get_journey_time(observations_longest()))
         )
       ),
 
@@ -76,7 +76,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Start Time"),
-            div(class = "description", "test")
+            div(class = "description", get_start_datetime(observations_longest()))
         )
       ),
 
@@ -84,7 +84,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "End Time"),
-            div(class = "description", "test")
+            div(class = "description", get_end_datetime(observations_longest()))
         )
       ),
 
@@ -92,7 +92,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Average Speed"),
-            div(class = "description", "test")
+            div(class = "description", get_average_speed(observations_longest()))
         )
       ),
 
@@ -100,7 +100,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Course"),
-            div(class = "description", "test")
+            div(class = "description", get_course(observations_longest()))
         )
       )
     )

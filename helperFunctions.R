@@ -19,7 +19,7 @@ haversine_dist <- function(lat1, lon1, lat2, lon2){
 }
 
 
-#Returns ship types sorted
+#Returns sorted ship types
 get_ship_types <- function(ships){
   ships %>%
     select(ship_type) %>%
@@ -45,7 +45,7 @@ get_ship_observations <- function(ships, input_ship_type, input_ship_name){
   #filter data for ship type and name and arrange by date
   observations <- ships %>%
     filter(ship_type == input_ship_type, SHIPNAME == input_ship_name) %>%
-    arrange(desc(date))
+    arrange(desc(DATETIME))
   
   #calculate distance traveled
   observations <- observations %>%
@@ -55,8 +55,9 @@ get_ship_observations <- function(ships, input_ship_type, input_ship_name){
   #find most recent observation with longest distance
   longest_index <- which(observations$distance == max(observations$distance, na.rm = TRUE))[1]
   
+  
   #Return the observation along with prior observation
-  observations[c(longest_index-1,longest_index),]
+  observations[c(longest_index-1,longest_index),] %>% arrange(DATETIME)
 }
 
 
@@ -64,5 +65,42 @@ get_ship_observations <- function(ships, input_ship_type, input_ship_name){
 get_dist_traveled <- function(observations_longest){
   observations_longest$distance[2]
 }
+
+get_destination <- function(observations_longest){
+  observations_longest$DESTINATION[2]
+}
+
+
+get_start_datetime <- function(observations_longest){
+  observations_longest$DATETIME[1]
+}
+
+
+get_end_datetime <- function(observations_longest){
+  observations_longest$DATETIME[2]
+}
+
+
+get_journey_time <- function(observations_longest){
+  
+  start <- as_datetime(observations_longest$DATETIME[1])
+  end  <- as_datetime(observations_longest$DATETIME[2])
+  time_interval <- start %--% end
+  duration_seconds <- as.duration(time_interval)
+  
+  as.period(duration_seconds)
+  
+}
+
+
+get_average_speed <- function(observations_longest){
+  observations_longest$SPEED[2]
+}
+
+
+get_course <- function(observations_longest){
+  observations_longest$COURSE[2]
+}
+
 
 
