@@ -1,11 +1,15 @@
 server = shinyServer(function(input, output, session) {
 
+  #Call the dropdown module...
+  #store observations of interest in variable
   observations_longest <- dropdown("dropdown1")
   
-  distance_max <- reactive({
+  #calculate the distance traveled
+  dist_travelled <- reactive({
     observations_longest()$distance[2]
   })
 
+  #Render the leaflet map
   output$map <- leaflet::renderLeaflet({
 
     observations_longest() %>%
@@ -14,28 +18,19 @@ server = shinyServer(function(input, output, session) {
     addTiles() %>%
     addCircleMarkers(~LON,
                      ~LAT,
-                     #radius = log(nasa_fireball$impact_e),
+                     #popup = ~ summary,
                      #label = nasa_fireball$date,
+                     #fillColor = 'red', color = 'red'
                      weight = 2)
-
-    #
-    #   #this shows circles on maps and allows popups showing info.
-    #   #about the event
-    #   addCircleMarkers(
-    #     popup = ~ summary, radius = ~ sqrt(fatalities)*3,
-    #     fillColor = 'red', color = 'red', weight = 1
-    #   )
   })
-
-  output$sidebar <- renderUI({
-      uiOutput("sailing_stats")
-  })
-
+  
+  #Render the distance traveled
   output$distance <- renderText({
-    paste0(format(distance_max(), big.mark = ",", nsmall = 2), " meters")
+    paste0(format(dist_travelled(), big.mark = ",", nsmall = 2), " meters")
   })
 
-  output$sailing_stats <- renderUI({
+  #Render the summary stats in the sidebar
+  output$sidebar <- renderUI({
 
     grid(
       grid_template = grid_template(default = list(
@@ -56,7 +51,6 @@ server = shinyServer(function(input, output, session) {
                          speed = "padding-right: 10px; padding-left: 5px",
                          course = "padding-left: 5px; padding-right: 10px"
                          ),
-
 
       status = div(class = "ui message success",
                    div(class = "header", "Distance travelled"),

@@ -2,17 +2,21 @@ dropdownUI <- function(id){
   ns <- NS(id)
   
   tagList(div(
+    #dropdown for ship type
     shiny.semantic::selectInput(ns("ship_type"), "Select Ship Type",
                                 choices = ships %>%
                                   select(ship_type) %>%
                                   unique() %>% 
-                                  pull(),
+                                  pull() %>%
+                                  sort(),
                                 selected = "Cargo"),
+    #dropdown for ship name
     shiny.semantic::selectInput(ns("ship_name"), "Select Ship",
                                 choices = ships %>%
                                   select(SHIPNAME) %>%
                                   unique() %>% 
-                                  pull(),
+                                  pull() %>%
+                                  sort(),
                                 selected = "KAROLI"),
   style = "padding-right: 10px")
   )
@@ -22,17 +26,20 @@ dropdown <- function(id){
   moduleServer(
     id,
     function(input, output, session) {
-
+      
+      #updates the dropdown for ship name when ship type is altered
       observe({
         choices <- ships %>% filter(ship_type == input$ship_type) %>%
           select(SHIPNAME) %>%
           unique() %>%
-          pull()
+          pull() %>%
+          sort()
         
         shiny.semantic::updateSelectInput(session, "ship_name", "Select Ship",
                                           choices = choices)
       })
       
+      #filters the data to keep only the 2 observations of interest
       observations <- reactive({
 
           #filter data for ship type and name and arrange by date
