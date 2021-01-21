@@ -3,24 +3,19 @@ dropdownUI <- function(id){
   
   tagList(div(
     #dropdown for ship type
-    shiny.semantic::selectInput(ns("ship_type"), "Select Ship Type",
-                                choices = ships %>%
-                                  select(ship_type) %>%
-                                  unique() %>% 
-                                  pull() %>%
-                                  sort(),
+    shiny.semantic::selectInput(ns("ship_type"), 
+                                label = "Select Ship Type",
+                                choices = get_ship_types(ships),
                                 selected = "Cargo"),
     #dropdown for ship name
-    shiny.semantic::selectInput(ns("ship_name"), "Select Ship",
-                                choices = ships %>%
-                                  select(SHIPNAME) %>%
-                                  unique() %>% 
-                                  pull() %>%
-                                  sort(),
+    shiny.semantic::selectInput(ns("ship_name"), 
+                                label = "Select Ship",
+                                choices = "Cargo",
                                 selected = "KAROLI"),
   style = "padding-right: 10px")
   )
 }
+
 
 dropdown <- function(id){
   moduleServer(
@@ -29,34 +24,16 @@ dropdown <- function(id){
       
       #updates the dropdown for ship name when ship type is altered
       observe({
-        choices <- ships %>% filter(ship_type == input$ship_type) %>%
-          select(SHIPNAME) %>%
-          unique() %>%
-          pull() %>%
-          sort()
-        
-        shiny.semantic::updateSelectInput(session, "ship_name", "Select Ship",
-                                          choices = choices)
+        shiny.semantic::updateSelectInput(session, "ship_name", 
+                                          label = "Select Ship",
+                                          choices = update_ship_choices(ships, input$ship_type))
       })
       
       #filters the data to keep only the 2 observations of interest
       observations <- reactive({
 
-          #filter data for ship type and name and arrange by date
-          observations <- ships %>%
-          filter(ship_type == input$ship_type, SHIPNAME == input$ship_name) %>%
-          arrange(desc(date))
+        get_ship_observations(ships, input$ship_type, input$ship_name)
         
-          #calculate distance traveled
-          observations <- observations %>%
-            mutate(LAT_prev = dplyr::lag(LAT), LON_prev = dplyr::lag(LON)) %>%
-            mutate(distance = haversine_dist(LAT_prev, LON_prev, LAT, LON))
-          
-          #find most recent observation with longest distance
-          longest_index <- which(observations$distance == max(observations$distance, na.rm = TRUE))[1]
-          
-          #Return the observations along with prior observation
-          observations[c(longest_index-1,longest_index),]
       })
      
       return(observations)

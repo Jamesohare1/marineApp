@@ -1,12 +1,12 @@
 server = shinyServer(function(input, output, session) {
 
   #Call the dropdown module...
-  #store observations of interest in variable
+  #store 2 observations of interest in variable
   observations_longest <- dropdown("dropdown1")
   
   #calculate the distance traveled
-  dist_travelled <- reactive({
-    observations_longest()$distance[2]
+  dist_traveled <- reactive({
+    get_dist_traveled (observations_longest())
   })
 
   #Render the leaflet map
@@ -26,7 +26,7 @@ server = shinyServer(function(input, output, session) {
   
   #Render the distance traveled
   output$distance <- renderText({
-    paste0(format(dist_travelled(), big.mark = ",", nsmall = 2), " meters")
+    paste0(format(dist_traveled(), big.mark = ",", nsmall = 2), " meters")
   })
 
   #Render the summary stats in the sidebar
