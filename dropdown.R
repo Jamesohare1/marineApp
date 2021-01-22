@@ -5,13 +5,13 @@ dropdownUI <- function(id){
     #dropdown for ship type
     shiny.semantic::selectInput(ns("ship_type"), 
                                 label = "Select Ship Type",
-                                choices = get_ship_types(ships),
-                                selected = "Cargo"),
+                                choices = ship_types,
+                                selected = "Passenger"),
     #dropdown for ship name
     shiny.semantic::selectInput(ns("ship_name"), 
                                 label = "Select Ship",
-                                choices = "TENDER1",
-                                selected = "TENDER1"),
+                                choices = default_ship_names,
+                                selected = head(default_ship_names, 1)),
   style = "padding-right: 10px")
   )
 }
@@ -24,19 +24,16 @@ dropdown <- function(id){
       
       #updates the dropdown for ship name when ship type is altered
       observe({
+        choices <- update_ship_choices(ships, input$ship_type)
         shiny.semantic::updateSelectInput(session, "ship_name", 
                                           label = "Select Ship",
-                                          choices = update_ship_choices(ships, input$ship_type))
-      })
-      
-      #filters the data to keep only the 2 observations of interest
-      observations <- reactive({
-
-        get_ship_observations(ships, input$ship_type, input$ship_name)
-        
+                                          choices = choices,
+                                          selected = head(choices,1))
       })
      
-      return(observations)
+      #return inputs to main server
+      return(list(reactive({input$ship_type}), 
+                  reactive({input$ship_name})))
     }
   )
 }

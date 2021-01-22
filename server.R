@@ -1,44 +1,86 @@
 server = shinyServer(function(input, output, session) {
-
-  #Call the dropdown module...
-  #store 2 observations of interest in variable
-  observations_longest <- dropdown("dropdown1")
+  
+  #Call the dropdown module, and retrieve inputs
+  dropdown_inputs <- dropdown("dropdown1")
+  input_ship_type <- dropdown_inputs[[1]]
+  input_ship_name <- dropdown_inputs[[2]]
+  
+  
+  #Get observations of interest
+  observations_longest <- reactive({
+    get_ship_observations(ships, input_ship_type(), input_ship_name())
+  })
+  
 
   #calculate the distance traveled
   dist_traveled <- reactive({
     get_dist_traveled(observations_longest())
   })
-
-  #Render the leaflet map
-  output$map <- leaflet::renderLeaflet({
-
-    observations_longest() %>%
-    leaflet() %>%
-    #setView(18, 54, zoom = 8) %>%
-    addTiles() %>%
-    addCircleMarkers(~LON[2],
-                     ~LAT[2],
-                     label = "Start Point",
-                     fillColor = 'red', color = 'red',
-                     weight = 3,
-                     opacity = 1,
-                     fillOpacity = 0.5) %>%
-      addCircleMarkers(~LON[1],
-                       ~LAT[1],
-                       label = "End Point",
-                       fillColor = 'green', color = 'green',
-                       weight = 3,
-                       opacity = 1,
-                       fillOpacity = 0.5) #%>%
-    #addPolylines(~LON,
-    #             ~LAT)
-  })
+  
   
   #Render the distance traveled
   output$distance <- renderText({
     paste0(format(dist_traveled(), big.mark = ",", nsmall = 2), " meters")
   })
+  
+  
+  #Render the destination
+  output$destination <- renderText({
+    get_destination(observations_longest())
+  })
+  
+  
+  #Render the journey time
+  output$journey_time <- renderUI({
+    get_journey_time(observations_longest())
+  })
+  
+  
+  #Render the start time
+  output$start_time <- renderUI({
+    get_start_datetime(observations_longest())
+  })
+  
+  
+  #Render the end time
+  output$end_time <- renderUI({
+    get_start_datetime(observations_longest())
+  })
 
+  
+  #Render the average speed
+  output$speed <- renderText({
+    get_average_speed(observations_longest())
+  })
+  
+  
+  #Render the average bearing
+  output$bearing <- renderText({
+    get_bearing(observations_longest())
+  })
+
+  
+  #Render the leaflet map
+  output$map <- leaflet::renderLeaflet({
+    observations_longest() %>%
+      leaflet() %>%
+      #setView(lon_end(), lat_end(), zoom = ) %>%
+      addTiles() %>%
+      addCircleMarkers(~LON[2], ~LAT[2],
+                       label = "Start Point",
+                       fillColor = 'green', color = 'green',
+                       weight = 3,
+                       opacity = 1,
+                       fillOpacity = 0.5) %>%
+      addCircleMarkers(~LON[1],~LAT[1],
+                       label = "End Point",
+                       fillColor = 'red', color = 'red',
+                       weight = 3,
+                       opacity = 1,
+                       fillOpacity = 0.5)
+  })
+  
+  
   #Render the summary stats in the sidebar
   output$sidebar <- renderUI({
 
@@ -70,7 +112,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Destination"),
-            div(class = "description", get_destination(observations_longest()))
+            div(class = "description", textOutput("destination"))
         )
       ),
 
@@ -78,7 +120,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Journey Time"),
-            div(class = "description", get_journey_time(observations_longest()))
+            div(class = "description", uiOutput("journey_time"))
         )
       ),
 
@@ -86,7 +128,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Journey Start"),
-            div(class = "description", get_start_datetime(observations_longest()))
+            div(class = "description", uiOutput("start_time"))
         )
       ),
 
@@ -94,7 +136,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Journey End"),
-            div(class = "description", get_end_datetime(observations_longest()))
+            div(class = "description", uiOutput("end_time"))
         )
       ),
 
@@ -102,7 +144,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Average Speed"),
-            div(class = "description", get_average_speed(observations_longest()))
+            div(class = "description", textOutput("speed"))
         )
       ),
 
@@ -110,7 +152,7 @@ server = shinyServer(function(input, output, session) {
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
             div(class = "header", style = "margin-bottom: 10px", "Average Bearing"),
-            div(class = "description", get_bearing(observations_longest()))
+            div(class = "description", textOutput("bearing"))
         )
       )
     )

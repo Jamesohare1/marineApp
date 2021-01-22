@@ -24,8 +24,8 @@ ui = semanticPage(
   grid(
     grid_template,
     title = h1("Marine App"),
-    info = uiOutput("sidebar"),
-    map = leaflet::leafletOutput('map', width = '100%', height = '100%'),
-    user = dropdownUI("dropdown1")
+    info =  uiOutput("sidebar"),
+    map =   leaflet::leafletOutput("map", width = '100%', height = '100%'),
+    user =  dropdownUI("dropdown1")
   )
 )
