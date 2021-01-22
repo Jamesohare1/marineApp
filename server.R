@@ -3,10 +3,10 @@ server = shinyServer(function(input, output, session) {
   #Call the dropdown module...
   #store 2 observations of interest in variable
   observations_longest <- dropdown("dropdown1")
-  
+
   #calculate the distance traveled
   dist_traveled <- reactive({
-    get_dist_traveled (observations_longest())
+    get_dist_traveled(observations_longest())
   })
 
   #Render the leaflet map
@@ -16,12 +16,22 @@ server = shinyServer(function(input, output, session) {
     leaflet() %>%
     #setView(18, 54, zoom = 8) %>%
     addTiles() %>%
-    addCircleMarkers(~LON,
-                     ~LAT,
-                     #popup = ~ summary,
-                     #label = nasa_fireball$date,
-                     #fillColor = 'red', color = 'red'
-                     weight = 2)
+    addCircleMarkers(~LON[2],
+                     ~LAT[2],
+                     label = "Start Point",
+                     fillColor = 'red', color = 'red',
+                     weight = 3,
+                     opacity = 1,
+                     fillOpacity = 0.5) %>%
+      addCircleMarkers(~LON[1],
+                       ~LAT[1],
+                       label = "End Point",
+                       fillColor = 'green', color = 'green',
+                       weight = 3,
+                       opacity = 1,
+                       fillOpacity = 0.5) #%>%
+    #addPolylines(~LON,
+    #             ~LAT)
   })
   
   #Render the distance traveled
@@ -38,7 +48,7 @@ server = shinyServer(function(input, output, session) {
           c("status", "status"),
           c("destination", "time_between"),
           c("start_date", "end_date"),
-          c("speed", "course")
+          c("speed", "bearing")
         ),
         cols_width = c("50%", "50%"),
         rows_height = c("80px", "160px", "160px", "160px")
@@ -49,7 +59,7 @@ server = shinyServer(function(input, output, session) {
                          start_date = "padding-right: 10px; padding-left: 5px",
                          end_date = "padding-right: 10px; padding-left: 5px",
                          speed = "padding-right: 10px; padding-left: 5px",
-                         course = "padding-left: 5px; padding-right: 10px"
+                         bearing = "padding-left: 5px; padding-right: 10px"
                          ),
 
       status = div(class = "ui message success",
@@ -75,7 +85,7 @@ server = shinyServer(function(input, output, session) {
       start_date = card(
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 10px", "Start Time"),
+            div(class = "header", style = "margin-bottom: 10px", "Journey Start"),
             div(class = "description", get_start_datetime(observations_longest()))
         )
       ),
@@ -83,7 +93,7 @@ server = shinyServer(function(input, output, session) {
       end_date = card(
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 10px", "End Time"),
+            div(class = "header", style = "margin-bottom: 10px", "Journey End"),
             div(class = "description", get_end_datetime(observations_longest()))
         )
       ),
@@ -96,11 +106,11 @@ server = shinyServer(function(input, output, session) {
         )
       ),
 
-      course = card(
+      bearing = card(
         style = "border-radius: 0; width: 100%; height: 150px; background: #efefef",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 10px", "Course"),
-            div(class = "description", get_course(observations_longest()))
+            div(class = "header", style = "margin-bottom: 10px", "Average Bearing"),
+            div(class = "description", get_bearing(observations_longest()))
         )
       )
     )

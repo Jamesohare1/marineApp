@@ -10,8 +10,8 @@ dropdownUI <- function(id){
     #dropdown for ship name
     shiny.semantic::selectInput(ns("ship_name"), 
                                 label = "Select Ship",
-                                choices = "Cargo",
-                                selected = "KAROLI"),
+                                choices = "TENDER1",
+                                selected = "TENDER1"),
   style = "padding-right: 10px")
   )
 }
