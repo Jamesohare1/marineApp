@@ -4,10 +4,9 @@ library(readr)
 library(stringr)
 library(purrr)
 library(lubridate)
-
 source("../../utils.R")
-ships <- read_csv("../../data/ships.csv")
 
+ships <- read_csv("../../data/ships.csv")
 ship_type <- "Passenger"
 ship_name <- "ADA"
 observations <- get_ship_observations(ships, ship_type, ship_name)

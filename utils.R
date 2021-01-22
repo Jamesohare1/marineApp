@@ -195,26 +195,26 @@ get_average_speed <- function(observations_longest){
   
 }
 
-draw_arrow <- function(observations_longest){
-  
-  x <- c(observations_longest$LAT[1], observations_longest$LAT[2])
-  y <- c(observations_longest$LON[1], observations_longest$LON[2])
-  
-  data <- data.frame(x,y)
-  
-  ggplot(data, aes(x = x, y=y)) + 
-    geom_segment(aes(x = x[1], y = y[1], xend = x[2], yend = y[2]),
-                 arrow = arrow(length = unit(1, "cm")), color = "darkgreen", size = 2) +
-    theme(panel.background = element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank(),
-          axis.title.x=element_blank(),
-          axis.text.y=element_blank(),
-          axis.ticks.y=element_blank(),
-          axis.title.y=element_blank()) +
-    coord_fixed()
-  
-  
-}
+# draw_arrow <- function(observations_longest){
+#   
+#   x <- c(observations_longest$LAT[1], observations_longest$LAT[2])
+#   y <- c(observations_longest$LON[1], observations_longest$LON[2])
+#   
+#   data <- data.frame(x,y)
+#   
+#   ggplot(data, aes(x = x, y=y)) + 
+#     geom_segment(aes(x = x[1], y = y[1], xend = x[2], yend = y[2]),
+#                  arrow = arrow(length = unit(1, "cm")), color = "darkgreen", size = 2) +
+#     theme(panel.background = element_blank(),
+#           axis.text.x=element_blank(),
+#           axis.ticks.x=element_blank(),
+#           axis.title.x=element_blank(),
+#           axis.text.y=element_blank(),
+#           axis.ticks.y=element_blank(),
+#           axis.title.y=element_blank()) +
+#     coord_fixed()
+#   
+#   
+# }
 
 
