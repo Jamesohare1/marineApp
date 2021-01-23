@@ -15,7 +15,7 @@ grid_template <- grid_template(
       "map",
       "user"
     ),
-    rows_height = c("70px", "400px", "auto", "200px"),
+    rows_height = c("80px", "400px", "auto", "200px"),
     cols_width = c("100%")
   )
 )
@@ -26,7 +26,9 @@ ui = semanticPage(
   ),
   grid(
     grid_template,
-    title = h1("Vessel Tracker", style = "padding-left: 10px; color: white"),
+    title = div(div(style="display:inline-block; padding-left: 10px; color: white", h1("Vessel Tracker")), 
+                div(style="display:inline-block; padding-right: 10px; padding-top: 7px; float: right", 
+                    actionButton("show_info", label = "info"))),
     info =  uiOutput("sidebar"),
     map =   leaflet::leafletOutput("map", width = '100%', height = '100%'),
     user =  dropdownUI("dropdown1")

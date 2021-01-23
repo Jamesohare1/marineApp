@@ -1,14 +1,38 @@
 server = shinyServer(function(input, output, session) {
   
+  # output$modalAction <- renderUI({
+  #   modal(
+  #     actionButton("hide", "Hide by calling hide_modal"),
+  #     id = "action-example-modal",
+  #     header = "Modal example",
+  #     footer = "",
+  #     class = "tiny"
+  #   )
+  # })
+  
+  #show modal
+  observeEvent(input$show_info, {
+    create_modal(modal(
+      id = "simple-modal",
+      title = "App Information",
+      header = list("App Information"),
+      content = info_Modal_Content
+    ))
+  })
+  
   #Call the dropdown module, and retrieve inputs
   dropdown_inputs <- dropdown("dropdown1")
   input_ship_type <- dropdown_inputs[[1]]
   input_ship_name <- dropdown_inputs[[2]]
   
+  #Get total observations for selected ship
+  observations_total <- reactive({
+    get_total_observations(ships, input_ship_type(), input_ship_name())
+  })
   
   #Get observations of interest
   observations_longest <- reactive({
-    get_ship_observations(ships, input_ship_type(), input_ship_name())
+    get_top_two_observations(ships, input_ship_type(), input_ship_name())
   })
   
 
@@ -17,6 +41,10 @@ server = shinyServer(function(input, output, session) {
     get_dist_traveled(observations_longest())
   })
   
+  #Render the total number of observations for selected ship
+  output$observations_total <- renderText({
+    format(observations_total(), big.mark = ",")
+  })
   
   #Render the distance traveled
   output$distance <- renderText({
@@ -88,14 +116,16 @@ server = shinyServer(function(input, output, session) {
       grid_template = grid_template(default = list(
         areas = rbind(
           c("status", "status"),
+          c("num_observations", "num_observations"),
           c("destination", "time_between"),
           c("start_date", "end_date"),
           c("speed", "bearing")
         ),
         cols_width = c("50%", "50%"),
-        rows_height = c("80px", "160px", "160px", "160px")
+        rows_height = c("100px", "100px", "120px", "120px", "120px")
       )),
       area_styles = list(status = "padding-right: 10px",
+                         num_observations = "padding-right: 10px",
                          destination = "padding-left: 10px; padding-right: 10px",
                          time_between = "padding-left: 5px; padding-right: 10px",
                          start_date = "padding-left: 10px; padding-right: 10px",
@@ -104,54 +134,57 @@ server = shinyServer(function(input, output, session) {
                          bearing = "padding-left: 5px; padding-right: 10px"
                          ),
 
-      status = div(class = "ui message success", style = "margin-left: 10px",
+      status = div(class = "ui message success", style = "margin-top: 10px; margin-left: 10px",
                    div(class = "header", style = "margin-bottom: 5px", textOutput("distance")),
-                   div(class = "description", "Straight-line distance travelled")),
+                   div(class = "description", paste0("Largest distance travelled for ", input_ship_name()))),
+      num_observations = div(class = "ui message success", style = "margin-left: 10px",
+                   div(class = "header", style = "margin-bottom: 5px", textOutput("observations_total")),
+                   div(class = "description", paste0("Number of observations for ", input_ship_name()))),
 
       destination = card(
-        style = "border-radius: 1; border-width: medium; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; border-width: medium; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("home"), "Destination"),
+            div(class = "header", style = "margin-bottom: 10px", icon("home"), "Destination"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", textOutput("destination"))
         )
       ),
 
       time_between = card(
-        style = "border-radius: 1; width: 100%; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("stopwatch"), "Journey Time"),
+            div(class = "header", style = "margin-bottom: 10px", icon("stopwatch"), "Journey Time"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", uiOutput("journey_time"))
         )
       ),
 
       start_date = card(
-        style = "border-radius: 1; width: 100%; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("hourglass start"), "Journey Start"),
+            div(class = "header", style = "margin-bottom: 10px", icon("hourglass start"), "Journey Start"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", uiOutput("start_time"))
         )
       ),
 
       end_date = card(
-        style = "border-radius: 1; width: 100%; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("hourglass end"), "Journey End"),
+            div(class = "header", style = "margin-bottom: 10px", icon("hourglass end"), "Journey End"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", uiOutput("end_time"))
         )
       ),
 
       speed = card(
-        style = "border-radius: 1; width: 100%; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("ship"), "Average Speed"),
+            div(class = "header", style = "margin-bottom: 10px", icon("ship"), "Average Speed"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", textOutput("speed"))
         )
       ),
 
       bearing = card(
-        style = "border-radius: 1; width: 100%; height: 150px; background: #ebf5f7",
+        style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",
         div(class = "content",
-            div(class = "header", style = "margin-bottom: 20px", icon("compass"), "Bearing"),
+            div(class = "header", style = "margin-bottom: 10px", icon("compass"), "Bearing"),
             div(class = "description", style = "margin-left: 30px; font-size: 15px; color: darkgreen", textOutput("bearing"))
         )
       )

@@ -11,6 +11,7 @@ library(lubridate)
 #source the dropdown module and helper function file
 source("dropdown.R")
 source("utils.R")
+source("infoModalContent.R")
 
 # read in the data
 ships <- read_csv("data/ships.csv")

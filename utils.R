@@ -1,5 +1,15 @@
+
+get_total_observations <- function(ships, input_ship_type, input_ship_name){
+  #filter data for ship type and name and arrange by date
+  ships %>%
+    filter(ship_type == input_ship_type, SHIPNAME == input_ship_name) %>%
+    count() %>%
+    as.numeric()
+}
+
+
 #Return relevant observations for a selected ship type
-get_ship_observations <- function(ships, input_ship_type, input_ship_name){
+get_top_two_observations <- function(ships, input_ship_type, input_ship_name){
   
   #filter data for ship type and name and arrange by date
   observations <- ships %>%
@@ -86,13 +96,21 @@ update_ship_choices <- function(ships, input_ship_type){
 
 #Return the distance traveled between two observations of interest
 get_dist_traveled <- function(observations_longest){
-  observations_longest$distance[2]
+  if(is.na(observations_longest$distance[2])){
+    0
+  }else{
+    observations_longest$distance[2]    
+  }
 }
 
 
 #Return destination
 get_destination <- function(observations_longest){
-  observations_longest$DESTINATION[2]
+  if(is.na(observations_longest$DESTINATION[2])){
+     "No Destination Recorded"
+  }else{
+    observations_longest$DESTINATION[2]
+  }
 }
 
 
@@ -191,30 +209,9 @@ get_average_speed <- function(observations_longest){
   end  <- as_datetime(observations_longest$DATETIME[2])
   duration_seconds <- as.numeric(as.duration(start %--% end))
   
-  paste(round(distance/duration_seconds, 2), "meters/second")
-  
+  if(is.na(distance) || distance == 0){
+    "Ship hasn't moved between observations"
+  }else{
+    paste(round(distance/duration_seconds, 2), "meters/second")
+  }
 }
-
-# draw_arrow <- function(observations_longest){
-#   
-#   x <- c(observations_longest$LAT[1], observations_longest$LAT[2])
-#   y <- c(observations_longest$LON[1], observations_longest$LON[2])
-#   
-#   data <- data.frame(x,y)
-#   
-#   ggplot(data, aes(x = x, y=y)) + 
-#     geom_segment(aes(x = x[1], y = y[1], xend = x[2], yend = y[2]),
-#                  arrow = arrow(length = unit(1, "cm")), color = "darkgreen", size = 2) +
-#     theme(panel.background = element_blank(),
-#           axis.text.x=element_blank(),
-#           axis.ticks.x=element_blank(),
-#           axis.title.x=element_blank(),
-#           axis.text.y=element_blank(),
-#           axis.ticks.y=element_blank(),
-#           axis.title.y=element_blank()) +
-#     coord_fixed()
-#   
-#   
-# }
-
-
