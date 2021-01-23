@@ -7,12 +7,14 @@ dropdownUI <- function(id){
                                 label = "Select Ship Type",
                                 choices = ship_types,
                                 selected = "Passenger"),
+    style = "padding-left: 10px; padding-top: 20px; padding-bottom: 20px; padding-right: 10px"),
+    div(
     #dropdown for ship name
     shiny.semantic::selectInput(ns("ship_name"), 
                                 label = "Select Ship",
                                 choices = default_ship_names,
                                 selected = head(default_ship_names, 1)),
-  style = "padding-right: 10px")
+    style = "padding-left: 10px; padding-right: 10px")
   )
 }
 

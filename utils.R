@@ -130,8 +130,8 @@ tidy_dateTime <- function(dateTime){
   time <- format(dateTime, format = "%H:%M:%S")
   date <- as.Date((dateTime))
   
-  tagList(tags$div(paste("Date:", date)),
-          tags$div(paste("Time:", time)))
+  tagList(tags$div(paste( date)),
+          tags$div(paste(time)))
   
 }
 
@@ -176,7 +176,7 @@ tidy_time <- function(units, text){
   
   if(units < 10){ units = str_c("0", units)}
   
-  ifelse(units == 1, 
+  ifelse(units == "01", 
          str_c(units, text, sep = " "), 
          str_c(units, " ", text, "s"))
 }
@@ -191,7 +191,7 @@ get_average_speed <- function(observations_longest){
   end  <- as_datetime(observations_longest$DATETIME[2])
   duration_seconds <- as.numeric(as.duration(start %--% end))
   
-  paste(round(distance/duration_seconds, 3), "meters/second")
+  paste(round(distance/duration_seconds, 2), "meters/second")
   
 }
 

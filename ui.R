@@ -21,9 +21,12 @@ grid_template <- grid_template(
 )
 
 ui = semanticPage(
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
+  ),
   grid(
     grid_template,
-    title = h1("Marine App"),
+    title = h1("Vessel Tracker", style = "padding-left: 10px; color: white"),
     info =  uiOutput("sidebar"),
     map =   leaflet::leafletOutput("map", width = '100%', height = '100%'),
     user =  dropdownUI("dropdown1")

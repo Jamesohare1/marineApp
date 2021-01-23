@@ -1,0 +1,8 @@
+body {
+  margin: 0 !important;
+  background: #2f3941 !important;
+}
+
+.ui.form .field > label {
+  color: white;
+}
