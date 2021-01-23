@@ -32,8 +32,9 @@ get_top_two_observations <- function(ships, input_ship_type, input_ship_name){
 
 #Calculate distance given two sets of coordinates (lat, lon)
 haversine_dist <- function(lat1, lon1, lat2, lon2){
+  #mathematical formulae taken from
+  #http://www.movable-type.co.uk/scripts/latlong.html?from=47.80423,-120.03866&to=47.830481,-120.00987
   
-  # #https://www.movable-type.co.uk/scripts/latlong.html
 
   r = 6378137
 
@@ -54,6 +55,7 @@ haversine_dist <- function(lat1, lon1, lat2, lon2){
 
 #Calculate the average bearing for a journey
 get_bearing <- function(observations_longest){
+  #mathematical formulae taken from
   #http://www.movable-type.co.uk/scripts/latlong.html?from=47.80423,-120.03866&to=47.830481,-120.00987
   
   to_radains <- pi/180
