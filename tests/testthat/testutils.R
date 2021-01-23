@@ -9,7 +9,18 @@ source("../../utils.R")
 ships <- read_csv("../../data/ships.csv")
 ship_type <- "Passenger"
 ship_name <- "ADA"
-observations <- get_ship_observations(ships, ship_type, ship_name)
+observations <- get_top_two_observations(ships, ship_type, ship_name)
+
+
+test_that("number of observations for selected ship is calculated correctly",{
+  
+  actual <- get_total_observations(ships, ship_type, ship_name)
+  expected <- read_rds("../testdata/totalObservations.rds")
+  
+  expect_equal(actual, expected)
+})
+
+
 
 test_that("correct observations are returned for a given ship type and name",{
   

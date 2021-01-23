@@ -1,15 +1,5 @@
 server = shinyServer(function(input, output, session) {
-  
-  # output$modalAction <- renderUI({
-  #   modal(
-  #     actionButton("hide", "Hide by calling hide_modal"),
-  #     id = "action-example-modal",
-  #     header = "Modal example",
-  #     footer = "",
-  #     class = "tiny"
-  #   )
-  # })
-  
+
   #show modal
   observeEvent(input$show_info, {
     create_modal(modal(
@@ -139,7 +129,7 @@ server = shinyServer(function(input, output, session) {
                    div(class = "description", paste0("Largest distance travelled for ", input_ship_name()))),
       num_observations = div(class = "ui message success", style = "margin-left: 10px",
                    div(class = "header", style = "margin-bottom: 5px", textOutput("observations_total")),
-                   div(class = "description", paste0("Number of observations for ", input_ship_name()))),
+                   div(class = "description", paste0("Total observations for ", input_ship_name()))),
 
       destination = card(
         style = "border-radius: 1; border-width: medium; height: 110px; background: #ebf5f7",
