@@ -16,6 +16,13 @@ info_Modal_Content <-
     p("The average speed has been calculated using the haversine distance and time between observations."),
     br(),
     hr(),
+    
+    h3("Data Cleansing"),
+    p("Some ships were seen to have more than one observation with the same datetime."),
+    p("These observations were removed due to unreliability."),
+    br(),
+    hr(),
+    
     p("Mathematical formulae for the haversine distance and the bearing have been taken from the  website linked below."),
     p("Calculations were checked against corresponding functions from the 'geosphere' package"),
     a("Calculate distance and bearing...", href="http://www.movable-type.co.uk/scripts/latlong.html?from=47.80423,-120.03866&to=47.830481,-120.00987")

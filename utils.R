@@ -15,6 +15,9 @@ get_top_two_observations <- function(ships, input_ship_type, input_ship_name){
     filter(ship_type == input_ship_type, SHIPNAME == input_ship_name) %>%
     arrange(desc(DATETIME))
   
+  #removing observations that have duplicated datetimes as these are unreliable
+  observations <- observations[!duplicated(observations$DATETIME),]
+  
   #calculate distance traveled
   observations <- observations %>%
     mutate(LAT_prev = dplyr::lead(LAT), LON_prev = dplyr::lead(LON)) %>%
@@ -101,7 +104,7 @@ get_dist_traveled <- function(observations_longest){
 
 #Return destination
 get_destination <- function(observations_longest){
-  if(is.na(observations_longest$DESTINATION[2])){
+  if(is.na(observations_longest$DESTINATION[2]) || observations_longest$DESTINATION[2] == "NaN"){
      "No Destination Recorded"
   }else{
     observations_longest$DESTINATION[2]
@@ -121,7 +124,7 @@ get_end_datetime <- function(observations_longest){
 }
 
 #Return the journey time
-get_journey_time <- function(observations_longest){
+get_duration <- function(observations_longest){
   
   start <- as_datetime(observations_longest$DATETIME[1])
   end  <- as_datetime(observations_longest$DATETIME[2])

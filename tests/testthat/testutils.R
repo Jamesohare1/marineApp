@@ -103,7 +103,7 @@ test_that("datetimes are being tidied and returned correctly",{
 
 test_that("journey time is being tidied and returned correctly",{
   
-  actual <- get_journey_time(observations)
+  actual <- get_duration(observations)
   expected <- read_rds("../testdata/journeyTime.rds")
   
   expect_equal(actual, expected)

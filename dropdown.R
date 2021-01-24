@@ -34,8 +34,8 @@ dropdown <- function(id){
       })
      
       #return inputs to main server
-      return(list(reactive({input$ship_type}), 
-                  reactive({input$ship_name})))
+      return(list(reactive({input$ship_name}), 
+                  reactive({input$ship_type})))
     }
   )
 }

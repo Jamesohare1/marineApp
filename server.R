@@ -12,8 +12,8 @@ server = shinyServer(function(input, output, session) {
   
   #Call the dropdown module, and retrieve inputs
   dropdown_inputs <- dropdown("dropdown1")
-  input_ship_type <- dropdown_inputs[[1]]
-  input_ship_name <- dropdown_inputs[[2]]
+  input_ship_name <- dropdown_inputs[[1]]
+  input_ship_type <- dropdown_inputs[[2]]
   
   #Get total observations for selected ship
   observations_total <- reactive({
@@ -48,7 +48,7 @@ server = shinyServer(function(input, output, session) {
   
   #Render the journey time
   output$journey_time <- renderUI({
-    get_journey_time(observations_longest())
+    get_duration(observations_longest())
   })
   
   #Render the start time
