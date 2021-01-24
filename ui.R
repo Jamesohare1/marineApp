@@ -11,11 +11,11 @@ grid_template <- grid_template(
   mobile = list(
     areas = rbind(
       "title",
-      "info",
       "map",
-      "user"
+      "user",
+      "info"
     ),
-    rows_height = c("80px", "400px", "auto", "200px"),
+    rows_height = c("60px", "400px", "200px", "auto"),
     cols_width = c("100%")
   )
 )
@@ -26,11 +26,12 @@ ui = semanticPage(
   ),
   grid(
     grid_template,
-    title = div(div(style="display:inline-block; padding-left: 10px; color: white", h1("Vessel Tracker")), 
+    title = div(div(style="display:inline-block; padding-left: 10px; color: white; padding-top: 5px", h1("Vessel Tracker")), 
                 div(style="display:inline-block; padding-right: 10px; padding-top: 7px; float: right", 
                     actionButton("show_info", label = "info"))),
     info =  uiOutput("sidebar"),
-    map =   leaflet::leafletOutput("map", width = '100%', height = '100%'),
-    user =  dropdownUI("dropdown1")
+    user =  dropdownUI("dropdown1"),
+    map =   leaflet::leafletOutput("map"),
+    
   )
 )

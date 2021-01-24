@@ -6,3 +6,9 @@ body {
 .ui.form .field > label {
   color: white;
 }
+
+@media screen and (min-width: 845px) {
+  #map {
+    height: 100vh !important;
+  }
+}
