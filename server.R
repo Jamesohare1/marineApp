@@ -108,11 +108,11 @@ server = shinyServer(function(input, output, session) {
       )),
       area_styles = list(status = "padding-right: 10px",
                          num_observations = "padding-right: 10px",
-                         destination = "padding-left: 10px; padding-right: 10px",
+                         destination = "padding-left: 10px; padding-right: 5px",
                          duration = "padding-left: 5px; padding-right: 10px",
-                         start_date = "padding-left: 10px; padding-right: 10px",
-                         end_date = "padding-right: 10px; padding-left: 5px",
-                         speed = "padding-left: 10px; padding-right: 10px",
+                         start_date = "padding-left: 10px; padding-right: 5px",
+                         end_date = "padding-left: 5px; padding-right: 10px",
+                         speed = "padding-left: 10px; padding-right: 5px",
                          bearing = "padding-left: 5px; padding-right: 10px"
                          ),
 
