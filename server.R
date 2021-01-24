@@ -10,19 +10,17 @@ server = shinyServer(function(input, output, session) {
     ))
   })
   
-  #Call the dropdown module, and retrieve inputs
-  dropdown_inputs <- dropdown("dropdown1")
-  input_ship_name <- dropdown_inputs[[1]]
-  input_ship_type <- dropdown_inputs[[2]]
+  #Call the user inputs module, and retrieve inputs
+  user_inputs <- user_inputs("user_inputs_1")
   
   #Get total observations for selected ship
   observations_total <- reactive({
-    get_total_observations(ships, input_ship_type(), input_ship_name())
+    get_total_observations(ships, user_inputs$ship_type(), user_inputs$ship_name())
   })
   
   #Get observations of interest
   observations_longest <- reactive({
-    get_top_two_observations(ships, input_ship_type(), input_ship_name())
+    get_top_two_observations(ships, user_inputs$ship_type(), user_inputs$ship_name())
   })
 
   #calculate the distance traveled
@@ -118,10 +116,10 @@ server = shinyServer(function(input, output, session) {
 
       status = div(class = "ui message success", style = "margin-top: 10px; margin-left: 10px",
                    div(class = "header", style = "margin-bottom: 5px", textOutput("distance")),
-                   div(class = "description", paste0("Largest distance travelled by ", input_ship_name()))),
+                   div(class = "description", paste0("Largest distance travelled by ", user_inputs$ship_name()))),
       num_observations = div(class = "ui message success", style = "margin-left: 10px",
                    div(class = "header", style = "margin-bottom: 5px", textOutput("observations_total")),
-                   div(class = "description", paste0("Total observations for ", input_ship_name()))),
+                   div(class = "description", paste0("Total observations for ", user_inputs$ship_name()))),
 
       destination = card(
         style = "border-radius: 1; width: 100%; height: 110px; background: #ebf5f7",

@@ -32,7 +32,7 @@ ui = semanticPage(
                 div(style="display:inline-block; padding-right: 10px; padding-top: 7px; float: right", 
                     actionButton("show_info", label = "info"))),
     summary =  uiOutput("sidebar"),
-    user =  dropdownUI("dropdown1"),
+    user =  user_inputsUI("user_inputs_1"),
     map =   leaflet::leafletOutput("map"),
     
   )

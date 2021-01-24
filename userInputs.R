@@ -1,4 +1,4 @@
-dropdownUI <- function(id){
+user_inputsUI <- function(id){
   ns <- NS(id)
   
   tagList(div(
@@ -19,7 +19,7 @@ dropdownUI <- function(id){
 }
 
 
-dropdown <- function(id){
+user_inputs <- function(id){
   moduleServer(
     id,
     function(input, output, session) {
@@ -32,10 +32,14 @@ dropdown <- function(id){
                                           choices = choices,
                                           selected = head(choices,1))
       })
-     
+
       #return inputs to main server
-      return(list(reactive({input$ship_name}), 
-                  reactive({input$ship_type})))
+      return(
+        list(
+          ship_name = reactive({input$ship_name}),
+          ship_type = reactive({input$ship_type})
+        )
+      )
     }
   )
 }

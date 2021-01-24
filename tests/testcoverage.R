@@ -3,7 +3,7 @@ library(covr)
 oldwd <- getwd()
 setwd(paste0(oldwd, "/tests/testthat"))
 
-res_all <- file_coverage(c("../../dropdown.R", "../../server.R", "../../utils.R"), 
+res_all <- file_coverage(c("../../userInputs.R", "../../server.R", "../../utils.R"), 
                      "testutils.R")
 res_utils <- file_coverage(c("../../utils.R"), 
                            "testutils.R")

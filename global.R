@@ -9,8 +9,8 @@ library(purrr)
 library(lubridate)
 
 #source the dropdown module and helper function file
-source("dropdown.R")
 source("utils.R")
+source("userInputs.R")
 source("infoModalContent.R")
 
 # read in the data
