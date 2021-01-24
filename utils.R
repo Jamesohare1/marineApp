@@ -1,4 +1,4 @@
-
+#Return total number of observations for a selected ship type
 get_total_observations <- function(ships, input_ship_type, input_ship_name){
   #filter data for ship type and name and arrange by date
   ships %>%
@@ -6,7 +6,6 @@ get_total_observations <- function(ships, input_ship_type, input_ship_name){
     count() %>%
     as.numeric()
 }
-
 
 #Return relevant observations for a selected ship type
 get_top_two_observations <- function(ships, input_ship_type, input_ship_name){
@@ -28,7 +27,6 @@ get_top_two_observations <- function(ships, input_ship_type, input_ship_name){
   #Return the observation along with prior observation
   observations[c(longest_index,longest_index+1),] %>% arrange(DATETIME)
 }
-
 
 #Calculate distance given two sets of coordinates (lat, lon)
 haversine_dist <- function(lat1, lon1, lat2, lon2){
@@ -52,7 +50,6 @@ haversine_dist <- function(lat1, lon1, lat2, lon2){
 
 }
 
-
 #Calculate the average bearing for a journey
 get_bearing <- function(observations_longest){
   #mathematical formulae taken from
@@ -75,7 +72,6 @@ get_bearing <- function(observations_longest){
   
 }
 
-
 #Return sorted ship types
 get_ship_types <- function(ships){
   ships %>%
@@ -84,7 +80,6 @@ get_ship_types <- function(ships){
     pull() %>%
     sort()
 }
-
 
 #Update available ship choices depending on which ship type is selected
 update_ship_choices <- function(ships, input_ship_type){
@@ -95,7 +90,6 @@ update_ship_choices <- function(ships, input_ship_type){
     sort()
 }
 
-
 #Return the distance traveled between two observations of interest
 get_dist_traveled <- function(observations_longest){
   if(is.na(observations_longest$distance[2])){
@@ -104,7 +98,6 @@ get_dist_traveled <- function(observations_longest){
     observations_longest$distance[2]    
   }
 }
-
 
 #Return destination
 get_destination <- function(observations_longest){
@@ -115,20 +108,17 @@ get_destination <- function(observations_longest){
   }
 }
 
-
 #Return the start time and date
 get_start_datetime <- function(observations_longest){
   dateTime <- observations_longest$DATETIME[1]
   tidy_dateTime(dateTime)
 }
 
-
 #Return the end time and date
 get_end_datetime <- function(observations_longest){
   dateTime <- observations_longest$DATETIME[2]
   tidy_dateTime(dateTime)
 }
-
 
 #Return the journey time
 get_journey_time <- function(observations_longest){
@@ -143,7 +133,6 @@ get_journey_time <- function(observations_longest){
   
 }
 
-
 #Helper function to prettify Journey start and end times
 tidy_dateTime <- function(dateTime){
   
@@ -154,7 +143,6 @@ tidy_dateTime <- function(dateTime){
           tags$div(paste(time)))
   
 }
-
 
 #Helper function to prettify the journey time
 parse_timePeriod <- function(period){
@@ -179,7 +167,6 @@ parse_timePeriod <- function(period){
   time_tidied  
 }
 
-
 #Helper function to prettify the journey time
 extract_units <- function(period, pattern){
   units_chr <- period %>% str_extract(pattern = pattern)
@@ -190,7 +177,6 @@ extract_units <- function(period, pattern){
   }
 }
 
-
 #Helper function to prettify the journey time
 tidy_time <- function(units, text){
   
@@ -200,7 +186,6 @@ tidy_time <- function(units, text){
          str_c(units, text, sep = " "), 
          str_c(units, " ", text, "s"))
 }
-
 
 #Calculate the average speed for a journey
 get_average_speed <- function(observations_longest){

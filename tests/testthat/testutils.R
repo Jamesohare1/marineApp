@@ -12,6 +12,7 @@ ship_name <- "ADA"
 observations <- get_top_two_observations(ships, ship_type, ship_name)
 
 
+# Start Tests --------------------------------------------------------------------------------
 test_that("number of observations for selected ship is calculated correctly",{
   
   actual <- get_total_observations(ships, ship_type, ship_name)

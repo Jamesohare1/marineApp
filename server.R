@@ -24,7 +24,6 @@ server = shinyServer(function(input, output, session) {
   observations_longest <- reactive({
     get_top_two_observations(ships, input_ship_type(), input_ship_name())
   })
-  
 
   #calculate the distance traveled
   dist_traveled <- reactive({
@@ -41,7 +40,6 @@ server = shinyServer(function(input, output, session) {
     paste0(format(round(dist_traveled(),2), big.mark = ","), " meters")
   })
   
-  
   #Render the destination
   output$destination <- renderText({
     get_destination(observations_longest())
@@ -53,30 +51,25 @@ server = shinyServer(function(input, output, session) {
     get_journey_time(observations_longest())
   })
   
-  
   #Render the start time
   output$start_time <- renderUI({
     get_start_datetime(observations_longest())
   })
   
-  
   #Render the end time
   output$end_time <- renderUI({
     get_end_datetime(observations_longest())
   })
-
   
   #Render the average speed
   output$speed <- renderText({
     get_average_speed(observations_longest())
   })
   
-  
   #Render the average bearing
   output$bearing <- renderText({
     get_bearing(observations_longest())
   })
-
   
   #Render the leaflet map
   output$map <- leaflet::renderLeaflet({
@@ -97,7 +90,6 @@ server = shinyServer(function(input, output, session) {
                        opacity = 1,
                        fillOpacity = 0.5)
   })
-  
   
   #Render the summary stats in the sidebar
   output$sidebar <- renderUI({

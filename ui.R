@@ -1,3 +1,5 @@
+#Grid Template sourced from https://github.com/Appsilon/shiny.semantic-hackathon-2020/tree/master/polluter-alert
+
 grid_template <- grid_template(
   default = list(
     areas = rbind(
